@@ -8,6 +8,12 @@ class RevendedorIn(BaseModel):
     senha: str
 
 
+class RevendedorOut(BaseModel):
+    nome_completo: str
+    cpf: str
+    email: str
+
+
 class CompraIn(BaseModel):
     codigo: str
     valor: str
@@ -22,6 +28,19 @@ class CompraOut(BaseModel):
     porcentagem_de_cashback: str
     valor_de_cashback: str
     status: str
+
+
+class Compra(BaseModel):
+    codigo: str
+    valor: str
+    data: str
+    cpf_do_revendedor: str
+    porcentagem_de_cashback: str
+    valor_de_cashback: str
+    status: str
+
+    class Config:
+        orm_mode = True
 
 
 class CashbackAcumulado(BaseModel):
