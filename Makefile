@@ -13,4 +13,4 @@ db/upgrade:
 	alembic upgrade head
 
 test:
-	poetry run pytest tests
+	poetry run pytest -v tests

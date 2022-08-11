@@ -1,6 +1,7 @@
 import uuid
-from sqlalchemy import Column, ForeignKey, String
+from sqlalchemy import Column, String
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 
 from app.infra.database.basemodel import Base
 
@@ -13,3 +14,5 @@ class Revendedor(Base):
     email = Column(String, unique=True, index=True)
     nome_completo = Column(String)
     senha_com_hash = Column(String)
+
+    compras = relationship("Compra", back_populates="revendedor")

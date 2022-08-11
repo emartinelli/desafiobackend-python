@@ -13,7 +13,7 @@ class Compra(Base):
     codigo = Column(String, unique=True, index=True)
     valor = Column(String)
     data = Column(String)
-    status = Column(String)
+    status = Column(String, default="Em validação")
     porcentagem_de_cashback = Column(String)
     revendedor_id = Column(UUID(as_uuid=True), ForeignKey("revendedores.id"))
 
