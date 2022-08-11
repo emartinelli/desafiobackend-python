@@ -1,7 +1,12 @@
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models.revendedor import Revendedor as RevendedorModel
-from app.schemas.revendedor import RevendedorIn, RevendedorOut
+from app.schemas.revendedor import RevendedorIn
+
+
+class DuplicateRevendedorException(Exception):
+    pass
 
 
 class RevendedorRepository:
@@ -17,7 +22,14 @@ class RevendedorRepository:
         )
 
         self.db.add(revendedor_model)
-        self.db.commit()
+        try:
+            self.db.commit()
+        except IntegrityError as e:
+            self.db.rollback()
+            raise DuplicateRevendedorException(
+                "Revendedor using same information"
+            ) from e
+
         self.db.refresh(revendedor_model)
 
         return revendedor_model
