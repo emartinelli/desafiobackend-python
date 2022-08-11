@@ -1,4 +1,4 @@
-from app.repository.cashback import CashbackRepository
+from app.repositories.cashback import CashbackRepository
 
 
 class CashbackService:

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.controllers.dependencies import get_db
-from app.repository.revendedor import DuplicateRevendedorException
+from app.repositories.revendedor import DuplicateRevendedorException
 from app.schemas.revendedor import RevendedorIn, RevendedorOut
 from app.services.revendedor import RevendedorService
 

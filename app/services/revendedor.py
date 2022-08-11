@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.models.revendedor import Revendedor as RevendedorModel
-from app.repository.revendedor import RevendedorRepository
+from app.repositories.revendedor import RevendedorRepository
 from app.schemas.revendedor import RevendedorIn, RevendedorOut
 
 

@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy.orm import Session
 
-from app.repository.revendedor import DuplicateRevendedorException
+from app.repositories.revendedor import DuplicateRevendedorException
 from app.schemas.revendedor import RevendedorIn, RevendedorOut
 from app.services.revendedor import RevendedorService
 from tests import utils

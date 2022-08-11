@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
 from app.models.compra import Compra as CompraModel
-from app.repository.compra import CompraRepository
-from app.repository.revendedor import RevendedorRepository
+from app.repositories.compra import CompraRepository
+from app.repositories.revendedor import RevendedorRepository
 from app.schemas.compra import CompraIn, CompraOut
 
 

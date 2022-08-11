@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy.orm import Session
 
-from app.repository.revendedor import RevendedorRepository
+from app.repositories.revendedor import RevendedorRepository
 from app.schemas.compra import CompraIn, CompraOut
 from app.schemas.revendedor import RevendedorIn
 from app.services.compra import CompraService

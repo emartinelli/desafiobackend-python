@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from app.repository.revendedor import RevendedorRepository
+from app.repositories.revendedor import RevendedorRepository
 from app.schemas.revendedor import RevendedorIn, RevendedorOut
 
 
