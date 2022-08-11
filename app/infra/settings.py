@@ -1,6 +1,6 @@
 from typing import Any, Optional
 
-from pydantic import BaseSettings, PostgresDsn, validator
+from pydantic import BaseSettings, PostgresDsn, validator, AnyHttpUrl
 
 
 class Settings(BaseSettings):
@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
+    CASHBACK_SERVICE_URL: AnyHttpUrl
 
     @validator("SQLALCHEMY_DATABASE_URI", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: dict[str, Any]) -> Any:
