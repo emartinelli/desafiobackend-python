@@ -1,5 +1,6 @@
-from app.infra.clients.cashback import CashbackClient
 import pytest
+
+from app.infra.clients.cashback import CashbackClient
 
 
 @pytest.fixture(scope="module")

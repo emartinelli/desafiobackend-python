@@ -1,7 +1,9 @@
 import logging
 from urllib.parse import urljoin
-from app.infra.settings import settings
+
 import requests
+
+from app.infra.settings import settings
 
 cashback_path = "/v1/cashback"
 

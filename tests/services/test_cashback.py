@@ -1,5 +1,6 @@
-from app.services.cashback import CashbackService
 import pytest
+
+from app.services.cashback import CashbackService
 
 
 @pytest.mark.parametrize(

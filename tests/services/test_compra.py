@@ -1,10 +1,11 @@
 import pytest
 from sqlalchemy.orm import Session
-from app.repository.revendedor import RevendedorRepository
 
+from app.repository.revendedor import RevendedorRepository
 from app.schemas.compra import CompraIn, CompraOut
 from app.schemas.revendedor import RevendedorIn
 from app.services.compra import CompraService
+from tests import utils
 
 
 @pytest.mark.parametrize(
@@ -69,9 +70,15 @@ def test_compra_create_raises_exception_when_revendedor_does_exist(
 
 
 @pytest.mark.parametrize(
-    "compra_in, compras_out",
+    "revendedor_in, compra_in, compras_out",
     [
         (
+            RevendedorIn(
+                nome_completo="Teste",
+                cpf="12345678901",
+                email="teste@teste.com",
+                senha="123456",
+            ),
             CompraIn(
                 codigo="ffedaf47-4fc5-4185-8ad1-003930d316e8",
                 valor="100.00",
@@ -92,17 +99,12 @@ def test_compra_create_raises_exception_when_revendedor_does_exist(
     ],
 )
 def test_get_compras(
-    db_session: Session, compra_in: CompraIn, compras_out: list[CompraOut]
+    db_session: Session,
+    revendedor_in: RevendedorIn,
+    compra_in: CompraIn,
+    compras_out: list[CompraOut],
 ):
-    RevendedorRepository(db_session).create(
-        RevendedorIn(
-            nome_completo="Teste",
-            cpf=compra_in.cpf_revendedor,
-            email="teste@teste.com",
-            senha="123456",
-        )
-    )
-
+    utils.create_revendedor(db_session, revendedor_in)
     service = CompraService(db_session)
     service.create(compra_in)
 
