@@ -11,7 +11,9 @@ logging.basicConfig(level=logging.DEBUG)
 class CashbackClient:
     def get_cashback_acumulado(self, cpf: str) -> float:
         response = requests.get(
-            urljoin(settings.CASHBACK_SERVICE_URL, cashback_path), params={"cpf": cpf}
+            urljoin(settings.CASHBACK_SERVICE_URL, cashback_path),
+            params={"cpf": cpf},
+            headers={"token": settings.CASHBACK_SERVICE_TOKEN},
         )
         response.raise_for_status()
 

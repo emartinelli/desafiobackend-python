@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
     CASHBACK_SERVICE_URL: AnyHttpUrl
+    CASHBACK_SERVICE_TOKEN: str
 
     @validator("SQLALCHEMY_DATABASE_URI", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: dict[str, Any]) -> Any:

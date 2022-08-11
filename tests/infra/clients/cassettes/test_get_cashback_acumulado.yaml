@@ -10,11 +10,13 @@ interactions:
       - keep-alive
       User-Agent:
       - python-requests/2.28.1
+      token:
+      - DUMMY
     method: GET
     uri: https://mdaqk8ek5j.execute-api.us-east-1.amazonaws.com/v1/cashback?cpf=123456
   response:
     body:
-      string: '{"statusCode":200,"body":{"credit":3199}}'
+      string: '{"statusCode":200,"body":{"credit":2009}}'
     headers:
       Connection:
       - keep-alive
@@ -23,13 +25,13 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Thu, 11 Aug 2022 15:10:23 GMT
+      - Thu, 11 Aug 2022 15:20:37 GMT
       X-Amzn-Trace-Id:
-      - Root=1-62f51bdf-536610692eb2fd6856ffae5d;Sampled=0
+      - Root=1-62f51e44-2a5675f50d0c306a476fd4fb;Sampled=0
       x-amz-apigw-id:
-      - WtFK4H7TIAMFb-A=
+      - WtGqxECwIAMFuxQ=
       x-amzn-RequestId:
-      - aec39e16-ad2c-4c86-ada4-f819695eb337
+      - 8c5ea28e-c8a5-48af-b996-f7c90dbc01cf
     status:
       code: 200
       message: OK
