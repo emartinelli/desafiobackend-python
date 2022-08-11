@@ -3,6 +3,8 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from app.infra.settings import settings
+from app.schemas.revendedor import RevendedorIn
+from tests import utils
 
 
 @pytest.mark.parametrize(
@@ -32,30 +34,61 @@ def test_create_revendedor(
         headers={"Content-Type": "application/json"},
     )
 
-    assert response.status_code == 200
+    assert response.status_code == 201
     assert response.json() == revendedor_out
 
 
 @pytest.mark.parametrize(
-    "revendedor_in, revendedor_out",
+    "revendedor_in",
+    [
+        dict(
+            nome_completo="Teste",
+            cpf="12345678901",
+            email="teste@teste.com",
+            senha="123456",
+        ),
+    ],
+)
+def test_create_revendedor_that_already_exists_returns_400(
+    client: TestClient, db_session: Session, revendedor_in: dict
+):
+    utils.create_revendedor(db_session, RevendedorIn(**revendedor_in))
+
+    response = client.post(
+        f"{settings.API_V1_STR}/revendedor/",
+        json=revendedor_in,
+        headers={"Content-Type": "application/json"},
+    )
+
+    assert response.status_code == 422
+    assert response.json() == {"detail": "Revendedor já cadastrado"}
+
+
+@pytest.mark.parametrize(
+    "revendedor_in, error_message",
     [
         (
             dict(
                 nome_completo="Teste",
                 cpf="12345678901",
+                email="invalid_email",
+                senha="123456",
+            ),
+            "value is not a valid email address",
+        ),
+        (
+            dict(
+                nome_completo="Teste",
+                cpf="12",
                 email="teste@teste.com",
                 senha="123456",
             ),
-            dict(
-                nome_completo="Teste",
-                cpf="12345678901",
-                email="teste@teste.com",
-            ),
-        )
+            "CPF deve conter 11 dígitos",
+        ),
     ],
 )
-def test_create_revendedor_that_already_exists_raises_exception(
-    client: TestClient, revendedor_in: dict, revendedor_out: dict
+def test_create_revendedor_with_invalid_data_input_returns_422(
+    client: TestClient, revendedor_in: dict, error_message: str
 ):
     response = client.post(
         f"{settings.API_V1_STR}/revendedor/",
@@ -63,5 +96,5 @@ def test_create_revendedor_that_already_exists_raises_exception(
         headers={"Content-Type": "application/json"},
     )
 
-    assert response.status_code == 200
-    assert response.json() == revendedor_out
+    assert response.status_code == 422
+    assert response.json()["detail"][0]["msg"] == error_message

@@ -9,6 +9,10 @@ format:
 isort:
 	poetry run isort .
 
+lint:
+	poetry run black .
+	poetry run isort .
+
 db/upgrade:
 	alembic upgrade head
 
