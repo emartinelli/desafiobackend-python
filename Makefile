@@ -11,3 +11,6 @@ isort:
 
 db/upgrade:
 	alembic upgrade head
+
+test:
+	poetry run pytest tests

@@ -1,19 +1,6 @@
 from pydantic import BaseModel
 
 
-class RevendedorIn(BaseModel):
-    nome_completo: str
-    cpf: str
-    email: str
-    senha: str
-
-
-class RevendedorOut(BaseModel):
-    nome_completo: str
-    cpf: str
-    email: str
-
-
 class CompraIn(BaseModel):
     codigo: str
     valor: str
@@ -41,7 +28,3 @@ class Compra(BaseModel):
 
     class Config:
         orm_mode = True
-
-
-class CashbackAcumulado(BaseModel):
-    cashback_acumulado: str
