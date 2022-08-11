@@ -42,3 +42,27 @@ def test_compra_create(db_session: Session, compra_in: CompraIn, compra_out: Com
     compra = service.create(compra_in)
 
     assert compra == compra_out
+
+
+@pytest.mark.parametrize(
+    "compra_in",
+    [
+        CompraIn(
+            codigo="ffedaf47-4fc5-4185-8ad1-003930d316e8",
+            valor="100.00",
+            data="2020-01-01",
+            cpf_revendedor="12345678901",
+        ),
+    ],
+)
+def test_compra_create_raises_exception_when_revendedor_does_exist(
+    db_session: Session,
+    compra_in: CompraIn,
+):
+    service = CompraService(db_session)
+
+    with pytest.raises(
+        Exception,
+        match=f"Revendedor with given cpf `{compra_in.cpf_revendedor}` does not exist",
+    ):
+        service.create(compra_in)

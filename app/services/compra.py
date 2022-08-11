@@ -12,10 +12,17 @@ class CompraService:
         self.revendedor_repository = RevendedorRepository(db)
 
     def create(self, compra: CompraIn) -> CompraOut:
-        revendedor_id = self.revendedor_repository.get_revendedor_by_cpf(
+        revendedor = self.revendedor_repository.get_revendedor_by_cpf(
             compra.cpf_revendedor
-        ).id
-        compra_model = self.repository.create(compra, revendedor_id)
+        )
+
+        if not revendedor:
+            # TODO: create specific exception
+            raise Exception(
+                f"Revendedor with given cpf `{compra.cpf_revendedor}` does not exist"
+            )
+
+        compra_model = self.repository.create(compra, revendedor.id)
 
         return CompraOut(
             codigo=compra_model.codigo,
