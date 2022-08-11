@@ -1,17 +1,22 @@
 from typing import Any, Optional
 
-from pydantic import BaseSettings, PostgresDsn, validator, AnyHttpUrl
+from pydantic import AnyHttpUrl, BaseSettings, PostgresDsn, validator
 
 
 class Settings(BaseSettings):
+    API_V1_STR: str = "/api/v1"
+    SERVER_HOST: AnyHttpUrl
+    SERVER_PORT: int
+    BACKEND_CORS_ORIGINS: list[AnyHttpUrl] = []
+
+    PROJECT_NAME: str = "Cashback Calculator"
+
     POSTGRES_SERVER: str
     POSTGRES_PORT: int
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
-    CASHBACK_SERVICE_URL: AnyHttpUrl
-    CASHBACK_SERVICE_TOKEN: str
 
     @validator("SQLALCHEMY_DATABASE_URI", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: dict[str, Any]) -> Any:
@@ -26,6 +31,9 @@ class Settings(BaseSettings):
             port=str(values.get("POSTGRES_PORT")) or "5432",
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
+
+    CASHBACK_SERVICE_URL: AnyHttpUrl
+    CASHBACK_SERVICE_TOKEN: str
 
     class Config:
         case_sensitive = True

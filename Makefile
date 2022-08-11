@@ -1,6 +1,6 @@
-.PHONY: run black isort db/upgrade test test/db
+.PHONY: run/dev black isort db/upgrade test test/db
 
-run:
+run/dev:
 	poetry run uvicorn main:app --reload
 
 format:
