@@ -24,6 +24,15 @@ class CompraService:
 
         compra_model = self.repository.create(compra, revendedor.id)
 
+        return self._map_model_to_schema(compra_model)
+
+    def get_compras(self) -> list[CompraOut]:
+        return [
+            self._map_model_to_schema(compra_model)
+            for compra_model in self.repository.get_all()
+        ]
+
+    def _map_model_to_schema(self, compra_model: CompraModel) -> CompraOut:
         return CompraOut(
             codigo=compra_model.codigo,
             valor=compra_model.valor,

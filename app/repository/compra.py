@@ -22,3 +22,6 @@ class CompraRepository:
         self.db.refresh(compra_model)
 
         return compra_model
+
+    def get_all(self) -> list[CompraModel]:
+        return self.db.query(CompraModel).all()
