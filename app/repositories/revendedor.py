@@ -25,7 +25,6 @@ class RevendedorRepository:
         try:
             self.db.commit()
         except IntegrityError as e:
-            self.db.rollback()
             raise DuplicateRevendedorException(
                 "Revendedor using same information"
             ) from e

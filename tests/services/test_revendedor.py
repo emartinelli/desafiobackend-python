@@ -49,7 +49,6 @@ def test_revendedor_create_that_already_exists_raises_exception(
     db_session: Session, revendedor_in: RevendedorIn
 ):
     utils.create_revendedor(db_session, revendedor_in)
-
     service = RevendedorService(db_session)
 
     with pytest.raises(

@@ -42,7 +42,7 @@ def test_create_revendedor(
     "revendedor_in",
     [
         dict(
-            nome_completo="Teste",
+            nome_completo="Teste Teste",
             cpf="12345678901",
             email="teste@teste.com",
             senha="123456",

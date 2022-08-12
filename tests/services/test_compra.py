@@ -1,8 +1,11 @@
+import datetime
+from decimal import Decimal
+
 import pytest
 from sqlalchemy.orm import Session
 
 from app.repositories.revendedor import RevendedorRepository
-from app.schemas.compra import CompraIn, CompraOut
+from app.schemas.compra import CompraIn, CompraOut, StatusEnum
 from app.schemas.revendedor import RevendedorIn
 from app.services.compra import CompraService
 from tests import utils
@@ -14,17 +17,17 @@ from tests import utils
         (
             CompraIn(
                 codigo="ffedaf47-4fc5-4185-8ad1-003930d316e8",
-                valor="100.00",
-                data="2020-01-01",
+                valor=Decimal("100.00"),
+                data=datetime.datetime(2020, 1, 1),
                 cpf_revendedor="12345678901",
             ),
             CompraOut(
                 codigo="ffedaf47-4fc5-4185-8ad1-003930d316e8",
-                valor="100.00",
-                data="2020-01-01",
-                porcentagem_de_cashback="0.10",
-                valor_de_cashback="10.00",
-                status="Em validação",
+                valor=Decimal("100.00"),
+                data=datetime.datetime(2020, 1, 1),
+                porcentagem_de_cashback=Decimal("0.10"),
+                valor_de_cashback=Decimal("10.00"),
+                status=StatusEnum.em_validacao,
             ),
         )
     ],
@@ -50,8 +53,8 @@ def test_compra_create(db_session: Session, compra_in: CompraIn, compra_out: Com
     [
         CompraIn(
             codigo="ffedaf47-4fc5-4185-8ad1-003930d316e8",
-            valor="100.00",
-            data="2020-01-01",
+            valor=Decimal("100.00"),
+            data=datetime.datetime(2020, 1, 1),
             cpf_revendedor="12345678901",
         ),
     ],
@@ -81,19 +84,19 @@ def test_compra_create_raises_exception_when_revendedor_does_exist(
             ),
             CompraIn(
                 codigo="ffedaf47-4fc5-4185-8ad1-003930d316e8",
-                valor="100.00",
-                data="2020-01-01",
+                valor=Decimal("100.00"),
+                data=datetime.datetime(2020, 1, 1),
                 cpf_revendedor="12345678901",
             ),
             [
                 CompraOut(
                     codigo="ffedaf47-4fc5-4185-8ad1-003930d316e8",
-                    valor="100.00",
-                    data="2020-01-01",
-                    porcentagem_de_cashback="0.10",
-                    valor_de_cashback="10.00",
-                    status="Em validação",
-                )
+                    valor=Decimal("100.00"),
+                    data=datetime.datetime(2020, 1, 1),
+                    porcentagem_de_cashback=Decimal("0.10"),
+                    valor_de_cashback=Decimal("10.00"),
+                    status=StatusEnum.em_validacao,
+                ),
             ],
         )
     ],
