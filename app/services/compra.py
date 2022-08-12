@@ -1,9 +1,8 @@
 from decimal import Decimal
 
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from app.exceptions.compra import RevendedorNotFoundException
+from app.exceptions.revendedor import RevendedorNotFoundException
 from app.models.compra import Compra as CompraModel
 from app.repositories.compra import CompraRepository
 from app.repositories.revendedor import RevendedorRepository
@@ -19,7 +18,6 @@ class CompraService:
         revendedor = self.revendedor_repository.get_revendedor_by_cpf(
             compra.cpf_revendedor
         )
-
         if not revendedor:
             raise RevendedorNotFoundException(
                 f"Revendedor with given cpf `{compra.cpf_revendedor}` does not exist"

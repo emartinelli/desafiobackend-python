@@ -1,12 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi_pagination import Page, add_pagination, paginate
 from sqlalchemy.orm import Session
 
 from app.controllers.dependencies import get_db
 from app.exceptions.compra import DuplicateCompraException
 from app.schemas.compra import CompraIn, CompraOut
 from app.services.compra import CompraService, RevendedorNotFoundException
-from fastapi_pagination import Page, add_pagination, paginate
-
 
 router = APIRouter()
 

@@ -1,0 +1,2 @@
+class CashbackClientException(Exception):
+    pass

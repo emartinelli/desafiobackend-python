@@ -17,7 +17,7 @@ class CompraIn(BaseModel):
     cpf_revendedor: str
 
     @validator("cpf_revendedor")
-    def validate_cpf(cls, v):
+    def validate_cpf(cls, v: str) -> str:
         if len(v) != 11:
             raise ValueError("CPF deve conter 11 dígitos")
 

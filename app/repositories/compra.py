@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.exceptions.compra import DuplicateCompraException
 from app.models.compra import Compra as CompraModel
-from app.schemas.compra import CompraIn, CompraOut
+from app.schemas.compra import CompraIn
 
 
 class CompraRepository:
