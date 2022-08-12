@@ -1,9 +1,8 @@
+import enum
 from datetime import datetime
 from decimal import Decimal
 
 from pydantic import BaseModel
-
-import enum
 
 
 class StatusEnum(str, enum.Enum):

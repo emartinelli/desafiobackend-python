@@ -12,7 +12,6 @@ router = APIRouter()
 @router.post("/", response_model=RevendedorOut, status_code=201)
 def create_revendedor(revendedor_in: RevendedorIn, db: Session = Depends(get_db)):
     service = RevendedorService(db)
-
     try:
         return service.create(revendedor_in)
     except DuplicateRevendedorException:
