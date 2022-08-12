@@ -19,13 +19,13 @@ class CashbackClient:
         try:
             response.raise_for_status()
         except requests.HTTPError as e:
-            raise CashbackClientException(e) from e
+            raise CashbackClientException(e, e.response.status_code) from e
 
         data = response.json()
         body = data["body"]
 
         status_code = data["statusCode"]
         if status_code != 200:
-            raise CashbackClientException(body["message"])
+            raise CashbackClientException(body["message"], status_code)
 
         return body["credit"]

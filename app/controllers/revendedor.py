@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.controllers.dependencies import get_db
+from ..exceptions.cashback import CashbackClientException
 from app.exceptions.revendedor import DuplicateRevendedorException
 from app.schemas.revendedor import RevendedorIn, RevendedorOut
 from app.services.cashback import CashbackService
@@ -19,10 +20,15 @@ def create_revendedor(revendedor_in: RevendedorIn, db: Session = Depends(get_db)
         raise HTTPException(status_code=422, detail="Revendedor já cadastrado")
 
 
-@router.get("/{cpf}/cashback", response_model=RevendedorOut, status_code=201)
+@router.get("/{cpf}/cashback", response_model=RevendedorOut, status_code=200)
 def get_cashback_acumulado(cpf: str, db: Session = Depends(get_db)):
-    service = CashbackService()
+    service = CashbackService(db)
     try:
         return service.get_cashback_acumulado(cpf)
     except DuplicateRevendedorException:
         raise HTTPException(status_code=422, detail="Revendedor já cadastrado")
+    except CashbackClientException as e:
+        if 400 <= e.status_code < 500:
+            raise HTTPException(status_code=400, detail=e.message)
+        else:
+            raise HTTPException(status_code=e.status_code, detail=e.message)
