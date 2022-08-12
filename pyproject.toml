@@ -13,6 +13,7 @@ alembic = "^1.8.1"
 psycopg2-binary = "^2.9.3"
 requests = "^2.28.1"
 email-validator = "^1.2.1"
+fastapi-pagination = "^0.9.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"
@@ -25,3 +26,9 @@ pytest-mock = "^3.8.2"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "error",
+    "ignore::sqlalchemy.exc.SAWarning",
+]

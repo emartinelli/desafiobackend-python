@@ -5,6 +5,8 @@ from app.controllers.dependencies import get_db
 from app.exceptions.compra import DuplicateCompraException
 from app.schemas.compra import CompraIn, CompraOut
 from app.services.compra import CompraService, RevendedorNotFoundException
+from fastapi_pagination import Page, add_pagination, paginate
+
 
 router = APIRouter()
 
@@ -21,3 +23,12 @@ def create_compra(compra_in: CompraIn, db: Session = Depends(get_db)):
             status_code=422,
             detail=f"Nenhum revendedor encontrado com o CPF `{compra_in.cpf_revendedor}`",
         )
+
+
+@router.get("/", response_model=Page[CompraOut], status_code=200)
+def get_compras(db: Session = Depends(get_db)):
+    service = CompraService(db)
+    return paginate(service.get_compras())
+
+
+add_pagination(router)

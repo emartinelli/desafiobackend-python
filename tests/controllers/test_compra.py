@@ -122,3 +122,51 @@ def test_create_compra_with_no_related_revendedor_returns_422(
 
     assert response.status_code == 422
     assert response.json()["detail"] == error_message
+
+
+@pytest.mark.parametrize(
+    "revendedor_in, compra_in, compra_out",
+    [
+        (
+            dict(
+                nome_completo="Teste Teste",
+                cpf="12345678901",
+                email="teste@teste.com",
+                senha="123456",
+            ),
+            dict(
+                codigo="ffedaf47-4fc5-4185-8ad1-003930d316e8",
+                valor="100.00",
+                data="2020-01-01 00:00:00",
+                cpf_revendedor="12345678901",
+            ),
+            dict(
+                codigo="ffedaf47-4fc5-4185-8ad1-003930d316e8",
+                valor=100.00,
+                data="2020-01-01T00:00:00",
+                porcentagem_de_cashback=0.1,
+                valor_de_cashback=10.00,
+                status="Em validação",
+            ),
+        )
+    ],
+)
+def test_get_compras(
+    client: TestClient,
+    db_session: Session,
+    revendedor_in: dict,
+    compra_in: dict,
+    compra_out: dict,
+):
+    utils.create_revendedor_and_compra(
+        db_session, CompraIn(**compra_in), RevendedorIn(**revendedor_in)
+    )
+
+    response = client.get(
+        f"{settings.API_V1_STR}/compra/",
+        json=compra_in,
+        headers={"Content-Type": "application/json"},
+    )
+
+    assert response.status_code == 200
+    assert compra_out in response.json()["items"]
