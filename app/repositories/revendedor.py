@@ -1,12 +1,9 @@
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from app.exceptions.revendedor import DuplicateRevendedorException
 from app.models.revendedor import Revendedor as RevendedorModel
 from app.schemas.revendedor import RevendedorIn
-
-
-class DuplicateRevendedorException(Exception):
-    pass
 
 
 class RevendedorRepository:

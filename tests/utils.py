@@ -14,14 +14,15 @@ def create_revendedor(db: Session, revendedor_in: RevendedorIn) -> RevendedorMod
     return RevendedorRepository(db).create(revendedor_in)
 
 
-def create_compra(
+def create_revendedor_and_compra(
     db: Session,
     compra_in: CompraIn,
-    revendedor_model: RevendedorModel,
-    porcentagem_de_cashback: Decimal,
+    revendedor_in: RevendedorIn,
+    porcentagem_de_cashback: Decimal = Decimal("0.1"),
 ) -> CompraModel:
+    revendedor = create_revendedor(db, revendedor_in)
     return CompraRepository(db).create(
         compra_in,
-        revendedor_id=revendedor_model,
+        revendedor_id=revendedor.id,
         porcentagem_de_cashback=porcentagem_de_cashback,
     )

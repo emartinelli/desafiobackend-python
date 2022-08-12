@@ -3,15 +3,14 @@
 run/dev:
 	poetry run uvicorn main:app --reload
 
-format:
+black:
 	poetry run black .
 
 isort:
 	poetry run isort .
 
-lint:
-	poetry run black .
-	poetry run isort .
+format: black isort
+
 
 db/upgrade:
 	alembic upgrade head

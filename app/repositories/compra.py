@@ -1,8 +1,10 @@
 from decimal import Decimal
 from uuid import UUID
 
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from app.exceptions.compra import DuplicateCompraException
 from app.models.compra import Compra as CompraModel
 from app.schemas.compra import CompraIn, CompraOut
 
@@ -23,7 +25,12 @@ class CompraRepository:
         )
 
         self.db.add(compra_model)
-        self.db.commit()
+        try:
+            self.db.commit()
+        except IntegrityError as e:
+            raise DuplicateCompraException(
+                f"Compra with given codigo `{compra.codigo}` already exists"
+            ) from e
         self.db.refresh(compra_model)
 
         return compra_model

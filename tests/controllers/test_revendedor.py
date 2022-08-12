@@ -39,18 +39,21 @@ def test_create_revendedor(
 
 
 @pytest.mark.parametrize(
-    "revendedor_in",
+    "revendedor_in, error_message",
     [
-        dict(
-            nome_completo="Teste Teste",
-            cpf="12345678901",
-            email="teste@teste.com",
-            senha="123456",
-        ),
+        (
+            dict(
+                nome_completo="Teste Teste",
+                cpf="12345678901",
+                email="teste@teste.com",
+                senha="123456",
+            ),
+            "Revendedor já cadastrado",
+        )
     ],
 )
-def test_create_revendedor_that_already_exists_returns_400(
-    client: TestClient, db_session: Session, revendedor_in: dict
+def test_create_revendedor_that_already_exists_returns_422(
+    client: TestClient, db_session: Session, revendedor_in: dict, error_message: str
 ):
     utils.create_revendedor(db_session, RevendedorIn(**revendedor_in))
 
@@ -61,7 +64,7 @@ def test_create_revendedor_that_already_exists_returns_400(
     )
 
     assert response.status_code == 422
-    assert response.json() == {"detail": "Revendedor já cadastrado"}
+    assert response.json()["detail"] == error_message
 
 
 @pytest.mark.parametrize(

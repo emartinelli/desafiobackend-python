@@ -3,18 +3,11 @@ from decimal import Decimal
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from app.exceptions.compra import RevendedorNotFoundException
 from app.models.compra import Compra as CompraModel
 from app.repositories.compra import CompraRepository
 from app.repositories.revendedor import RevendedorRepository
 from app.schemas.compra import CompraIn, CompraOut
-
-
-class RevendedorNotFound(Exception):
-    pass
-
-
-class DuplicateCompra(Exception):
-    pass
 
 
 class CompraService:
@@ -28,18 +21,13 @@ class CompraService:
         )
 
         if not revendedor:
-            raise RevendedorNotFound(
+            raise RevendedorNotFoundException(
                 f"Revendedor with given cpf `{compra.cpf_revendedor}` does not exist"
             )
 
-        try:
-            compra_model = self.repository.create(
-                compra, revendedor.id, porcentagem_de_cashback=Decimal("0.1")
-            )
-        except IntegrityError as e:
-            raise DuplicateCompra(
-                f"Compra with given codigo `{compra.codigo}` already exists"
-            ) from e
+        compra_model = self.repository.create(
+            compra, revendedor.id, porcentagem_de_cashback=Decimal("0.1")
+        )
 
         return self._map_model_to_schema(compra_model)
 

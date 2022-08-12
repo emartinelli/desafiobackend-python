@@ -4,11 +4,11 @@ from decimal import Decimal
 import pytest
 from sqlalchemy.orm import Session
 
-from app.repositories.revendedor import RevendedorRepository
+from app.exceptions.compra import (DuplicateCompraException,
+                                   RevendedorNotFoundException)
 from app.schemas.compra import CompraIn, CompraOut, StatusEnum
 from app.schemas.revendedor import RevendedorIn
-from app.services.compra import (CompraService, DuplicateCompra,
-                                 RevendedorNotFound)
+from app.services.compra import CompraService
 from tests import utils
 
 
@@ -70,7 +70,7 @@ def test_compra_create_raises_exception_when_revendedor_does_not_exist(
     service = CompraService(db_session)
 
     with pytest.raises(
-        RevendedorNotFound,
+        RevendedorNotFoundException,
         match=f"Revendedor with given cpf `{compra_in.cpf_revendedor}` does not exist",
     ):
         service.create(compra_in)
@@ -100,14 +100,15 @@ def test_compra_create_raises_exception_when_compra_with_same_code_already_exist
     revendedor_in: RevendedorIn,
     compra_in: CompraIn,
 ):
-    revendedor = utils.create_revendedor(db_session, revendedor_in)
     service = CompraService(db_session)
 
     with pytest.raises(
-        DuplicateCompra,
+        DuplicateCompraException,
         match=f"Compra with given codigo `{compra_in.codigo}` already exists",
     ):
-        utils.create_compra(db_session, compra_in, revendedor.id, Decimal("0.10"))
+        utils.create_revendedor_and_compra(
+            db_session, compra_in, revendedor_in, Decimal("0.10")
+        )
         service.create(compra_in)
 
 

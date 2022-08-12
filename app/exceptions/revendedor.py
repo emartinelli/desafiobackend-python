@@ -1,0 +1,2 @@
+class DuplicateRevendedorException(Exception):
+    pass
