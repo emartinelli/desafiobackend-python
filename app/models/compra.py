@@ -1,21 +1,25 @@
 import uuid
 
-from sqlalchemy import Column, ForeignKey, String
+from sqlalchemy import Column, ForeignKey, String, Numeric, DateTime, Enum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 from app.infra.database.basemodel import Base
+
+from app.schemas.compra import StatusEnum
 
 
 class Compra(Base):
     __tablename__ = "compras"
 
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
-    codigo = Column(String, unique=True, index=True)
-    valor = Column(String)
-    data = Column(String)
-    status = Column(String, default="Em validação")
-    porcentagem_de_cashback = Column(String)
-    revendedor_id = Column(UUID(as_uuid=True), ForeignKey("revendedores.id"))
+    codigo = Column(String(50), unique=True, index=True, nullable=False)
+    valor = Column(Numeric(asdecimal=True), nullable=False)
+    data = Column(DateTime, nullable=False)
+    status = Column(Enum(StatusEnum), default=StatusEnum.em_validacao, nullable=False)
+    porcentagem_de_cashback = Column(Numeric(asdecimal=True), nullable=False)
+    revendedor_id = Column(
+        UUID(as_uuid=True), ForeignKey("revendedores.id"), nullable=False
+    )
 
     revendedor = relationship("Revendedor", back_populates="compras")

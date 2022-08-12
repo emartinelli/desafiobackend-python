@@ -1,11 +1,12 @@
 from datetime import datetime
 from decimal import Decimal
-from enum import Enum
 
 from pydantic import BaseModel
 
+import enum
 
-class StatusEnum(str, Enum):
+
+class StatusEnum(str, enum.Enum):
     em_validacao = "Em validação"
     aprovado = "Aprovado"
 

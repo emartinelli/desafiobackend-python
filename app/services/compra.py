@@ -1,3 +1,4 @@
+from decimal import Decimal
 from sqlalchemy.orm import Session
 
 from app.models.compra import Compra as CompraModel
@@ -22,7 +23,9 @@ class CompraService:
                 f"Revendedor with given cpf `{compra.cpf_revendedor}` does not exist"
             )
 
-        compra_model = self.repository.create(compra, revendedor.id)
+        compra_model = self.repository.create(
+            compra, revendedor.id, porcentagem_de_cashback=Decimal("0.1")
+        )
 
         return self._map_model_to_schema(compra_model)
 
@@ -37,7 +40,7 @@ class CompraService:
             codigo=compra_model.codigo,
             valor=compra_model.valor,
             data=compra_model.data,
-            porcentagem_de_cashback=compra_model.porcentagem_de_cashback or "0.10",
-            valor_de_cashback="10.00",
+            porcentagem_de_cashback=compra_model.porcentagem_de_cashback,
+            valor_de_cashback=compra_model.valor * compra_model.porcentagem_de_cashback,
             status=compra_model.status,
         )
