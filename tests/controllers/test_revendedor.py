@@ -7,6 +7,14 @@ from app.schemas.revendedor import RevendedorIn
 from tests import utils
 
 
+@pytest.fixture(scope="module")
+def vcr_config():
+    return {
+        # Replace the Authorization request header with "DUMMY" in cassettes
+        "filter_headers": [("token", "DUMMY")],
+    }
+
+
 @pytest.mark.parametrize(
     "revendedor_in, revendedor_out",
     [
@@ -101,3 +109,37 @@ def test_create_revendedor_with_invalid_data_input_returns_422(
 
     assert response.status_code == 422
     assert response.json()["detail"][0]["msg"] == error_message
+
+
+@pytest.mark.parametrize(
+    "revendedor_in, revendedor_out",
+    [
+        (
+            dict(
+                nome_completo="Teste",
+                cpf="12345678901",
+                email="teste@teste.com",
+                senha="123456",
+            ),
+            dict(
+                nome_completo="Teste",
+                cpf="12345678901",
+                email="teste@teste.com",
+            ),
+        )
+    ],
+)
+@pytest.mark.vcr
+def test_get_cashback_acumulado(
+    client: TestClient, db_session: Session, revendedor_in: dict, revendedor_out: dict
+):
+    utils.create_revendedor(db_session, RevendedorIn(**revendedor_in))
+
+    response = client.get(
+        f"{settings.API_V1_STR}/revendedor/{revendedor_in['cpf']}/cashback",
+        headers={"Content-Type": "application/json"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["revendedor"] == revendedor_out
+    assert response.json()["cashback_acumulado"] == 3096

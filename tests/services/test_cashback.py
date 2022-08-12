@@ -1,3 +1,4 @@
+from decimal import Decimal
 import pytest
 from sqlalchemy.orm import Session
 
@@ -18,7 +19,7 @@ from app.exceptions.cashback import CashbackClientException
                 email="teste@teste.com",
                 senha="123456",
             ),
-            123.45,
+            Decimal("123.45"),
         ),
     ],
 )
@@ -35,7 +36,10 @@ def test_get_cashback_acumulado(
     utils.create_revendedor(db_session, revendedor_in)
 
     service = CashbackService(db_session)
-    service.get_cashback_acumulado(cpf=revendedor_in.cpf)
+    cashback_acumulado = service.get_cashback_acumulado(
+        cpf=revendedor_in.cpf
+    ).cashback_acumulado
+    assert cashback_acumulado == expected_cashback_acumulado
 
 
 @pytest.mark.parametrize(

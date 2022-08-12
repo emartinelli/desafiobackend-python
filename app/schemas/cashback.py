@@ -1,5 +1,8 @@
+from decimal import Decimal
 from pydantic import BaseModel
+from app.schemas.revendedor import RevendedorOut
 
 
-class CashbackAcumulado(BaseModel):
-    cashback_acumulado: str
+class CashbackAcumuladoOut(BaseModel):
+    revendedor: RevendedorOut
+    cashback_acumulado: Decimal

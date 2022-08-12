@@ -19,6 +19,6 @@ def test_get_cashback_acumulado():
 
 @pytest.mark.vcr()
 def test_get_cashback_acumulado_raises_error_with_no_cpf():
-    with pytest.raises(Exception, match="Informe o CPF do revendedor\(a\)!"):
+    with pytest.raises(Exception, match=r"Informe o CPF do revendedor\(a\)!"):
         client = CashbackClient()
         client.get_cashback_acumulado(cpf=None)

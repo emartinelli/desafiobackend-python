@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 from app.repositories.revendedor import RevendedorRepository
 from app.schemas.revendedor import RevendedorIn, RevendedorOut
+from app.models.revendedor import Revendedor as RevendedorModel
 
 
 class RevendedorService:
@@ -10,9 +11,4 @@ class RevendedorService:
 
     def create(self, revendedor: RevendedorIn) -> RevendedorOut:
         revendedor_model = self.repository.create(revendedor)
-
-        return RevendedorOut(
-            nome_completo=revendedor_model.nome_completo,
-            cpf=revendedor_model.cpf,
-            email=revendedor_model.email,
-        )
+        return RevendedorRepository.map_model_to_schema(revendedor_model)
