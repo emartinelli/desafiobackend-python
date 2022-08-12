@@ -2,7 +2,7 @@ import enum
 from datetime import datetime
 from decimal import Decimal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 class StatusEnum(str, enum.Enum):
@@ -16,6 +16,13 @@ class CompraIn(BaseModel):
     data: datetime
     cpf_revendedor: str
 
+    @validator("cpf_revendedor")
+    def validate_cpf(cls, v):
+        if len(v) != 11:
+            raise ValueError("CPF deve conter 11 dígitos")
+
+        return v
+
 
 class CompraOut(BaseModel):
     codigo: str
@@ -24,16 +31,3 @@ class CompraOut(BaseModel):
     porcentagem_de_cashback: Decimal
     valor_de_cashback: Decimal
     status: StatusEnum
-
-
-class Compra(BaseModel):
-    codigo: str
-    valor: Decimal
-    data: datetime
-    cpf_do_revendedor: str
-    porcentagem_de_cashback: Decimal
-    valor_de_cashback: Decimal
-    status: StatusEnum
-
-    class Config:
-        orm_mode = True

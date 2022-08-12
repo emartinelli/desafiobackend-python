@@ -93,3 +93,32 @@ def test_create_compra_that_already_exists_returns_422(
 
     assert response.status_code == 422
     assert response.json()["detail"] == error_message
+
+
+@pytest.mark.parametrize(
+    "compra_in, error_message",
+    [
+        (
+            dict(
+                codigo="ffedaf47-4fc5-4185-8ad1-003930d316e8",
+                valor="100.00",
+                data="2020-01-01 00:00:00",
+                cpf_revendedor="12345678901",
+            ),
+            "Nenhum revendedor encontrado com o CPF `12345678901`",
+        )
+    ],
+)
+def test_create_compra_with_no_related_revendedor_returns_422(
+    client: TestClient,
+    compra_in: dict,
+    error_message: str,
+):
+    response = client.post(
+        f"{settings.API_V1_STR}/compra/",
+        json=compra_in,
+        headers={"Content-Type": "application/json"},
+    )
+
+    assert response.status_code == 422
+    assert response.json()["detail"] == error_message
