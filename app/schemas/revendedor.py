@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel, EmailStr, validator
 
 
@@ -6,6 +7,7 @@ class RevendedorIn(BaseModel):
     cpf: str
     email: EmailStr
     senha: str
+    status_compra_default: Optional[str] = None
 
     @validator("cpf")
     def validate_cpf(cls, v):

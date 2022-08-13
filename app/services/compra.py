@@ -24,7 +24,10 @@ class CompraService:
             )
 
         compra_model = self.repository.create(
-            compra, revendedor.id, porcentagem_de_cashback=Decimal("0.1")
+            compra,
+            revendedor.id,
+            porcentagem_de_cashback=Decimal("0.1"),
+            status=revendedor.status_compra_default,
         )
 
         return self._map_model_to_schema(compra_model)

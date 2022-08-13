@@ -16,6 +16,7 @@ class RevendedorRepository:
             email=revendedor.email,
             nome_completo=revendedor.nome_completo,
             senha_com_hash=revendedor.senha,
+            status_compra_default=revendedor.status_compra_default,
         )
 
         self.db.add(revendedor_model)

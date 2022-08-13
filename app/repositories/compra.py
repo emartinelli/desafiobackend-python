@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.exceptions.compra import DuplicateCompraException
 from app.models.compra import Compra as CompraModel
-from app.schemas.compra import CompraIn
+from app.schemas.compra import CompraIn, StatusEnum
 
 
 class CompraRepository:
@@ -14,7 +14,11 @@ class CompraRepository:
         self.db = db
 
     def create(
-        self, compra: CompraIn, revendedor_id: UUID, porcentagem_de_cashback: Decimal
+        self,
+        compra: CompraIn,
+        revendedor_id: UUID,
+        porcentagem_de_cashback: Decimal,
+        status: StatusEnum,
     ) -> CompraModel:
         compra_model = CompraModel(
             codigo=compra.codigo,
@@ -23,6 +27,9 @@ class CompraRepository:
             revendedor_id=revendedor_id,
             porcentagem_de_cashback=porcentagem_de_cashback,
         )
+
+        if status:
+            compra_model.status = status
 
         self.db.add(compra_model)
         try:
