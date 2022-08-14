@@ -77,6 +77,7 @@ def test_create_compra(
 def test_create_compra_that_already_exists_returns_422(
     client: TestClient,
     db_session: Session,
+    api_user_headers: dict[str, str],
     revendedor_in: dict,
     compra_in: dict,
     error_message: str,
@@ -88,7 +89,7 @@ def test_create_compra_that_already_exists_returns_422(
     response = client.post(
         f"{settings.API_V1_STR}/compra/",
         json=compra_in,
-        headers={"Content-Type": "application/json"},
+        headers={"Content-Type": "application/json", **api_user_headers},
     )
 
     assert response.status_code == 422
