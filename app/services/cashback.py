@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 
 from app.repositories.cashback import CashbackRepository
-
 from app.schemas.cashback import CashbackAcumuladoOut
 
 

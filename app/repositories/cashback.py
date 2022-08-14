@@ -1,6 +1,7 @@
-from app.infra.clients.cashback import CashbackClient
-from app.exceptions.revendedor import RevendedorNotFoundException
 from sqlalchemy.orm import Session
+
+from app.exceptions.revendedor import RevendedorNotFoundException
+from app.infra.clients.cashback import CashbackClient
 from app.repositories.revendedor import RevendedorRepository
 from app.schemas.cashback import CashbackAcumuladoOut
 

@@ -1,12 +1,13 @@
 from decimal import Decimal
+
 import pytest
 from sqlalchemy.orm import Session
 
+from app.exceptions.cashback import CashbackClientException
 from app.exceptions.revendedor import RevendedorNotFoundException
 from app.schemas.revendedor import RevendedorIn
 from app.services.cashback import CashbackService
 from tests import utils
-from app.exceptions.cashback import CashbackClientException
 
 
 @pytest.mark.parametrize(

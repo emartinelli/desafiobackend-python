@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, String, Enum
+from sqlalchemy import Column, Enum, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 

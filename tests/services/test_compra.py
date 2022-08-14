@@ -2,16 +2,16 @@ import datetime
 from decimal import Decimal
 
 import pytest
+from psycopg2.extras import NumericRange
 from sqlalchemy.orm import Session
 
 from app.exceptions.compra import DuplicateCompraException
 from app.exceptions.revendedor import RevendedorNotFoundException
+from app.models.cashback import CashbackCriterio
 from app.schemas.compra import CompraIn, CompraOut, StatusEnum
 from app.schemas.revendedor import RevendedorIn
 from app.services.compra import CompraService
 from tests import utils
-from app.models.cashback import CashbackCriterio
-from psycopg2.extras import NumericRange
 
 
 @pytest.mark.parametrize(

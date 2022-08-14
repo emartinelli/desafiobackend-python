@@ -1,14 +1,19 @@
+from datetime import timedelta
+from typing import Any
+
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from app.controllers.dependencies import get_db
-from ..schemas.cashback import CashbackAcumuladoOut
-from ..exceptions.cashback import CashbackClientException
-from app.exceptions.revendedor import (
-    DuplicateRevendedorException,
-    RevendedorNotFoundException,
-)
+from app.exceptions.cashback import CashbackClientException
+from app.exceptions.revendedor import (DuplicateRevendedorException,
+                                       RevendedorNotFoundException)
+from app.infra.security import create_access_token
+from app.infra.settings import settings
+from app.schemas.cashback import CashbackAcumuladoOut
 from app.schemas.revendedor import RevendedorIn, RevendedorOut
+from app.schemas.token import Token
 from app.services.cashback import CashbackService
 from app.services.revendedor import RevendedorService
 
@@ -36,3 +41,15 @@ def get_cashback_acumulado(cpf: str, db: Session = Depends(get_db)):
             raise HTTPException(status_code=400, detail=e.message)
         else:
             raise HTTPException(status_code=e.status_code, detail=e.message)
+
+
+@router.post("/login/access-token", response_model=Token)
+def login_access_token(
+    db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()
+):
+    service = RevendedorService(db)
+    token = service.get_token(email=form_data.username, password=form_data.password)
+    if not token:
+        raise HTTPException(status_code=400, detail="Email ou senha inválidos")
+
+    return token

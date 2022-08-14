@@ -143,3 +143,34 @@ def test_get_cashback_acumulado(
     assert response.status_code == 200
     assert response.json()["revendedor"] == revendedor_out
     assert response.json()["cashback_acumulado"] == 3096
+
+
+@pytest.mark.parametrize(
+    "revendedor_in",
+    [
+        (
+            dict(
+                nome_completo="Teste",
+                cpf="12345678901",
+                email="teste@teste.com",
+                senha="123456",
+            )
+        )
+    ],
+)
+def test_get_access_token(
+    client: TestClient, db_session: Session, revendedor_in: dict
+) -> None:
+    login_data = {
+        "username": revendedor_in["email"],
+        "password": revendedor_in["senha"],
+    }
+    utils.create_revendedor(db_session, RevendedorIn(**revendedor_in))
+
+    response = client.post(
+        f"{settings.API_V1_STR}/revendedor/login/access-token", data=login_data
+    )
+    tokens = response.json()
+    assert response.status_code == 200
+    assert "access_token" in tokens
+    assert tokens["access_token"]

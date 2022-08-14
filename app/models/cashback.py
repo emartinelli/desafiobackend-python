@@ -1,7 +1,7 @@
 import uuid
 
 from sqlalchemy import Column, Numeric
-from sqlalchemy.dialects.postgresql import UUID, NUMRANGE
+from sqlalchemy.dialects.postgresql import NUMRANGE, UUID
 
 from app.infra.database.basemodel import Base
 

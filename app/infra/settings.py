@@ -1,3 +1,4 @@
+import secrets
 from typing import Any, Optional
 
 from pydantic import AnyHttpUrl, BaseSettings, PostgresDsn, validator
@@ -8,6 +9,10 @@ class Settings(BaseSettings):
     SERVER_HOST: AnyHttpUrl
     SERVER_PORT: int
     BACKEND_CORS_ORIGINS: list[AnyHttpUrl] = []
+
+    SECRET_KEY: str = secrets.token_urlsafe(32)
+    # 60 minutes * 24 hours * 8 days = 8 days
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
     PROJECT_NAME: str = "Cashback Calculator"
 

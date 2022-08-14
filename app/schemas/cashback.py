@@ -1,5 +1,7 @@
 from decimal import Decimal
+
 from pydantic import BaseModel
+
 from app.schemas.revendedor import RevendedorOut
 
 
