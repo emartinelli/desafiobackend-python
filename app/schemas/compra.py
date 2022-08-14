@@ -1,6 +1,7 @@
 import enum
 from datetime import datetime
 from decimal import Decimal
+from typing import Optional
 
 from pydantic import BaseModel, validator
 
@@ -28,6 +29,6 @@ class CompraOut(BaseModel):
     codigo: str
     valor: Decimal
     data: datetime
-    porcentagem_de_cashback: Decimal
-    valor_de_cashback: Decimal
+    porcentagem_de_cashback: Optional[Decimal]
+    valor_de_cashback: Optional[Decimal]
     status: StatusEnum

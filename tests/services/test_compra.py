@@ -10,6 +10,8 @@ from app.schemas.compra import CompraIn, CompraOut, StatusEnum
 from app.schemas.revendedor import RevendedorIn
 from app.services.compra import CompraService
 from tests import utils
+from app.models.cashback import CashbackCriterio
+from psycopg2.extras import NumericRange
 
 
 @pytest.mark.parametrize(
@@ -32,8 +34,6 @@ from tests import utils
                 codigo="ffedaf47-4fc5-4185-8ad1-003930d316e8",
                 valor=Decimal("100.00"),
                 data=datetime.datetime(2020, 1, 1),
-                porcentagem_de_cashback=Decimal("0.10"),
-                valor_de_cashback=Decimal("10.00"),
                 status=StatusEnum.em_validacao,
             ),
         )
@@ -106,9 +106,7 @@ def test_compra_create_raises_exception_when_compra_with_same_code_already_exist
         DuplicateCompraException,
         match=f"Compra with given codigo `{compra_in.codigo}` already exists",
     ):
-        utils.create_revendedor_and_compra(
-            db_session, compra_in, revendedor_in, Decimal("0.10")
-        )
+        utils.create_revendedor_and_compra(db_session, compra_in, revendedor_in)
         service.create(compra_in)
 
 
@@ -146,6 +144,26 @@ def test_get_compras(
     compra_out: CompraOut,
 ):
     utils.create_revendedor(db_session, revendedor_in)
+    db_session.add_all(
+        [
+            CashbackCriterio(
+                intervalo=NumericRange(Decimal("0"), Decimal("1000")),
+                porcentagem_de_cashback=Decimal("0.10"),
+            ),
+            CashbackCriterio(
+                intervalo=NumericRange(Decimal("1000"), Decimal("1500")),
+                porcentagem_de_cashback=Decimal("0.10"),
+            ),
+            CashbackCriterio(
+                intervalo=NumericRange(
+                    Decimal("1500"),
+                ),
+                porcentagem_de_cashback=Decimal("0.10"),
+            ),
+        ]
+    )
+    db_session.commit()
+
     service = CompraService(db_session)
     service.create(compra_in)
 
@@ -174,8 +192,6 @@ def test_get_compras(
                 codigo="ffedaf47-4fc5-4185-8ad1-003930d316e8",
                 valor=Decimal("100.00"),
                 data=datetime.datetime(2020, 1, 1),
-                porcentagem_de_cashback=Decimal("0.10"),
-                valor_de_cashback=Decimal("10.00"),
                 status=StatusEnum.aprovado,
             ),
         )

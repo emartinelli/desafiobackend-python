@@ -1,4 +1,5 @@
 from decimal import Decimal
+from typing import Optional
 from uuid import UUID
 
 from sqlalchemy.exc import IntegrityError
@@ -17,15 +18,13 @@ class CompraRepository:
         self,
         compra: CompraIn,
         revendedor_id: UUID,
-        porcentagem_de_cashback: Decimal,
-        status: StatusEnum,
+        status: Optional[StatusEnum] = None,
     ) -> CompraModel:
         compra_model = CompraModel(
             codigo=compra.codigo,
             valor=compra.valor,
             data=compra.data,
             revendedor_id=revendedor_id,
-            porcentagem_de_cashback=porcentagem_de_cashback,
         )
 
         if status:

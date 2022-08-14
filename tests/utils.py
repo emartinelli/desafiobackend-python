@@ -18,11 +18,6 @@ def create_revendedor_and_compra(
     db: Session,
     compra_in: CompraIn,
     revendedor_in: RevendedorIn,
-    porcentagem_de_cashback: Decimal = Decimal("0.1"),
 ) -> CompraModel:
     revendedor = create_revendedor(db, revendedor_in)
-    return CompraRepository(db).create(
-        compra_in,
-        revendedor_id=revendedor.id,
-        porcentagem_de_cashback=porcentagem_de_cashback,
-    )
+    return CompraRepository(db).create(compra_in, revendedor_id=revendedor.id)

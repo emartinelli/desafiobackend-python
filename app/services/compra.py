@@ -26,24 +26,23 @@ class CompraService:
         compra_model = self.repository.create(
             compra,
             revendedor.id,
-            porcentagem_de_cashback=Decimal("0.1"),
             status=revendedor.status_compra_default,
         )
 
         return self._map_model_to_schema(compra_model)
 
     def get_compras(self) -> list[CompraOut]:
-        return [
+        compras = [
             self._map_model_to_schema(compra_model)
             for compra_model in self.repository.get_all()
         ]
+
+        return compras
 
     def _map_model_to_schema(self, compra_model: CompraModel) -> CompraOut:
         return CompraOut(
             codigo=compra_model.codigo,
             valor=compra_model.valor,
             data=compra_model.data,
-            porcentagem_de_cashback=compra_model.porcentagem_de_cashback,
-            valor_de_cashback=compra_model.valor * compra_model.porcentagem_de_cashback,
             status=compra_model.status,
         )

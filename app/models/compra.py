@@ -16,7 +16,6 @@ class Compra(Base):
     valor = Column(Numeric(asdecimal=True), nullable=False)
     data = Column(DateTime, nullable=False)
     status = Column(Enum(StatusEnum), default=StatusEnum.em_validacao, nullable=False)
-    porcentagem_de_cashback = Column(Numeric(asdecimal=True), nullable=False)
     revendedor_id = Column(
         UUID(as_uuid=True), ForeignKey("revendedores.id"), nullable=False
     )
