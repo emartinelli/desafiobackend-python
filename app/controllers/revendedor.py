@@ -2,16 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from app.controllers.dependencies import (
-    get_current_revendedor,
-    get_db,
-    get_current_api_user,
-)
+from app.controllers.dependencies import (get_current_api_user,
+                                          get_current_revendedor, get_db)
 from app.exceptions.cashback import CashbackClientException
-from app.exceptions.revendedor import (
-    DuplicateRevendedorException,
-    RevendedorNotFoundException,
-)
+from app.exceptions.revendedor import (DuplicateRevendedorException,
+                                       RevendedorNotFoundException)
 from app.schemas.cashback import CashbackAcumuladoOut
 from app.schemas.revendedor import RevendedorIn, RevendedorOut
 from app.schemas.token import Token

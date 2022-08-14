@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.controllers import compra, revendedor, login
+from app.controllers import compra, login, revendedor
 
 api_router = APIRouter()
 
