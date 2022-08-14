@@ -174,3 +174,30 @@ def test_get_access_token(
     assert response.status_code == 200
     assert "access_token" in tokens
     assert tokens["access_token"]
+
+
+@pytest.mark.parametrize(
+    "revendedor_in",
+    [
+        (
+            dict(
+                nome_completo="Teste",
+                cpf="12345678901",
+                email="teste@teste.com",
+                senha="123456",
+            )
+        )
+    ],
+)
+def test_validate_login(
+    client: TestClient, db_session: Session, make_revendedor_headers, revendedor_in
+) -> None:
+    utils.create_revendedor(db_session, RevendedorIn(**revendedor_in))
+
+    r = client.get(
+        f"{settings.API_V1_STR}/revendedor/login/validate",
+        headers=make_revendedor_headers(revendedor_in["email"], revendedor_in["senha"]),
+    )
+    result = r.json()
+    assert r.status_code == 200
+    assert "email" in result

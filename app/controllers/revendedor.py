@@ -1,16 +1,11 @@
-from datetime import timedelta
-from typing import Any
-
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from app.controllers.dependencies import get_db
+from app.controllers.dependencies import get_current_revendedor, get_db
 from app.exceptions.cashback import CashbackClientException
 from app.exceptions.revendedor import (DuplicateRevendedorException,
                                        RevendedorNotFoundException)
-from app.infra.security import create_access_token
-from app.infra.settings import settings
 from app.schemas.cashback import CashbackAcumuladoOut
 from app.schemas.revendedor import RevendedorIn, RevendedorOut
 from app.schemas.token import Token
@@ -53,3 +48,8 @@ def login_access_token(
         raise HTTPException(status_code=400, detail="Email ou senha inválidos")
 
     return token
+
+
+@router.get("/login/validate", response_model=RevendedorOut)
+def login_validate(current_revendedor: RevendedorOut = Depends(get_current_revendedor)):
+    return current_revendedor

@@ -1,7 +1,9 @@
-from decimal import Decimal
+from typing import Dict
 
+from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
+from app.infra.settings import settings
 from app.models.compra import Compra as CompraModel
 from app.models.revendedor import Revendedor as Revendedor
 from app.repositories.compra import CompraRepository
@@ -21,3 +23,15 @@ def create_revendedor_and_compra(
 ) -> CompraModel:
     revendedor = create_revendedor(db, revendedor_in)
     return CompraRepository(db).create(compra_in, revendedor_id=revendedor.id)
+
+
+def get_revendedor_authentication_headers(
+    client: TestClient, email: str, password: str
+) -> Dict[str, str]:
+    data = {"username": email, "password": password}
+
+    r = client.post(f"{settings.API_V1_STR}/revendedor/login/access-token", data=data)
+    response = r.json()
+    auth_token = response["access_token"]
+    headers = {"Authorization": f"Bearer {auth_token}"}
+    return headers

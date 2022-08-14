@@ -1,4 +1,5 @@
 from datetime import timedelta
+from uuid import UUID
 
 from sqlalchemy.orm import Session
 
@@ -16,6 +17,10 @@ class RevendedorService:
 
     def create(self, revendedor: RevendedorIn) -> RevendedorOut:
         revendedor_model = self.repository.create(revendedor)
+        return RevendedorRepository.map_model_to_schema(revendedor_model)
+
+    def get(self, id: UUID) -> RevendedorOut:
+        revendedor_model = self.repository.get(id)
         return RevendedorRepository.map_model_to_schema(revendedor_model)
 
     def get_token(self, email: str, password: str) -> Token:
