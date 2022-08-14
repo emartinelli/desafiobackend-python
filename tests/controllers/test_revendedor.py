@@ -34,12 +34,15 @@ def vcr_config():
     ],
 )
 def test_create_revendedor(
-    client: TestClient, revendedor_in: dict, revendedor_out: dict
+    client: TestClient,
+    api_user_headers: dict[str, str],
+    revendedor_in: dict,
+    revendedor_out: dict,
 ):
     response = client.post(
         f"{settings.API_V1_STR}/revendedor/",
         json=revendedor_in,
-        headers={"Content-Type": "application/json"},
+        headers={"Content-Type": "application/json", **api_user_headers},
     )
 
     assert response.status_code == 201
@@ -61,14 +64,18 @@ def test_create_revendedor(
     ],
 )
 def test_create_revendedor_that_already_exists_returns_422(
-    client: TestClient, db_session: Session, revendedor_in: dict, error_message: str
+    client: TestClient,
+    db_session: Session,
+    api_user_headers: dict[str, str],
+    revendedor_in: dict,
+    error_message: str,
 ):
     utils.create_revendedor(db_session, RevendedorIn(**revendedor_in))
 
     response = client.post(
         f"{settings.API_V1_STR}/revendedor/",
         json=revendedor_in,
-        headers={"Content-Type": "application/json"},
+        headers={"Content-Type": "application/json", **api_user_headers},
     )
 
     assert response.status_code == 422
@@ -99,12 +106,15 @@ def test_create_revendedor_that_already_exists_returns_422(
     ],
 )
 def test_create_revendedor_with_invalid_data_input_returns_422(
-    client: TestClient, revendedor_in: dict, error_message: str
+    client: TestClient,
+    api_user_headers: dict[str, str],
+    revendedor_in: dict,
+    error_message: str,
 ):
     response = client.post(
         f"{settings.API_V1_STR}/revendedor/",
         json=revendedor_in,
-        headers={"Content-Type": "application/json"},
+        headers={"Content-Type": "application/json", **api_user_headers},
     )
 
     assert response.status_code == 422
@@ -131,13 +141,17 @@ def test_create_revendedor_with_invalid_data_input_returns_422(
 )
 @pytest.mark.vcr
 def test_get_cashback_acumulado(
-    client: TestClient, db_session: Session, revendedor_in: dict, revendedor_out: dict
+    client: TestClient,
+    db_session: Session,
+    api_user_headers: dict[str, str],
+    revendedor_in: dict,
+    revendedor_out: dict,
 ):
     utils.create_revendedor(db_session, RevendedorIn(**revendedor_in))
 
     response = client.get(
         f"{settings.API_V1_STR}/revendedor/{revendedor_in['cpf']}/cashback",
-        headers={"Content-Type": "application/json"},
+        headers={"Content-Type": "application/json", **api_user_headers},
     )
 
     assert response.status_code == 200
@@ -159,7 +173,9 @@ def test_get_cashback_acumulado(
     ],
 )
 def test_get_access_token(
-    client: TestClient, db_session: Session, revendedor_in: dict
+    client: TestClient,
+    db_session: Session,
+    revendedor_in: dict,
 ) -> None:
     login_data = {
         "username": revendedor_in["email"],

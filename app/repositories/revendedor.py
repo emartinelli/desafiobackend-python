@@ -35,10 +35,10 @@ class RevendedorRepository:
 
         return revendedor_model
 
-    def get(self, id: UUID) -> Revendedor:
+    def get(self, id: UUID) -> Optional[Revendedor]:
         return self.db.query(Revendedor).filter(Revendedor.id == id).first()
 
-    def get_revendedor_by_cpf(self, cpf: str) -> Revendedor:
+    def get_revendedor_by_cpf(self, cpf: str) -> Optional[Revendedor]:
         return self.db.query(Revendedor).filter(Revendedor.cpf == cpf).first()
 
     def get_by_email(self, email: str) -> Optional[Revendedor]:

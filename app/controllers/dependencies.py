@@ -10,7 +10,7 @@ from app.infra import security
 from app.infra.database.session import SessionLocal
 from app.infra.settings import settings
 from app.models.revendedor import Revendedor
-from app.repositories.revendedor import RevendedorRepository
+from app.repositories.api_user import APIUserRepository
 from app.schemas.token import TokenPayload
 from app.services.revendedor import RevendedorService
 
@@ -30,8 +30,28 @@ def get_db() -> Generator[Session, None, None]:
 def get_current_revendedor(
     db: Session = Depends(get_db), token: str = Depends(reusable_oauth2)
 ) -> Revendedor:
-    service = RevendedorService(db)
+    token_data = decode_token(token)
 
+    service = RevendedorService(db)
+    revendedor = service.get(id=token_data.sub)
+    if not revendedor:
+        raise HTTPException(status_code=404, detail="Revendedor não encontrado")
+    return revendedor
+
+
+def get_current_api_user(
+    db: Session = Depends(get_db), token: str = Depends(reusable_oauth2)
+):
+    token_data = decode_token(token)
+
+    repository = APIUserRepository(db)
+    user = repository.get(id=token_data.sub)
+    if not user:
+        raise HTTPException(status_code=404, detail="API user not found")
+    return user
+
+
+def decode_token(token: str) -> TokenPayload:
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
@@ -43,7 +63,4 @@ def get_current_revendedor(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",
         )
-    revendedor = service.get(id=token_data.sub)
-    if not revendedor:
-        raise HTTPException(status_code=404, detail="Revendedor não encontrado")
-    return revendedor
+    return token_data
