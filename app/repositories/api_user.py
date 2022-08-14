@@ -1,7 +1,6 @@
 from typing import Optional
 from uuid import UUID
 
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.infra.security import get_password_hash, verify_password

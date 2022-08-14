@@ -14,8 +14,12 @@ from app.repositories.api_user import APIUserRepository
 from app.schemas.token import TokenPayload
 from app.services.revendedor import RevendedorService
 
-reusable_oauth2 = OAuth2PasswordBearer(
-    tokenUrl=f"{settings.API_V1_STR}/revendedor/login/access-token"
+api_oauth2 = OAuth2PasswordBearer(
+    tokenUrl=f"{settings.API_V1_STR}/login/access-token", scheme_name="api"
+)
+revendedor_oauth2 = OAuth2PasswordBearer(
+    tokenUrl=f"{settings.API_V1_STR}/revendedor/login/access-token",
+    scheme_name="revendedor",
 )
 
 
@@ -28,7 +32,7 @@ def get_db() -> Generator[Session, None, None]:
 
 
 def get_current_revendedor(
-    db: Session = Depends(get_db), token: str = Depends(reusable_oauth2)
+    db: Session = Depends(get_db), token: str = Depends(revendedor_oauth2)
 ) -> Revendedor:
     token_data = decode_token(token)
 
@@ -40,7 +44,7 @@ def get_current_revendedor(
 
 
 def get_current_api_user(
-    db: Session = Depends(get_db), token: str = Depends(reusable_oauth2)
+    db: Session = Depends(get_db), token: str = Depends(api_oauth2)
 ):
     token_data = decode_token(token)
 
