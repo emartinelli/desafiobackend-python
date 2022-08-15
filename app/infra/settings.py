@@ -1,7 +1,7 @@
 import secrets
 from typing import Any, Optional
 
-from pydantic import AnyHttpUrl, BaseSettings, PostgresDsn, validator
+from pydantic import AnyHttpUrl, BaseSettings, PostgresDsn, validator, HttpUrl
 
 
 class Settings(BaseSettings):
@@ -39,6 +39,8 @@ class Settings(BaseSettings):
 
     CASHBACK_SERVICE_URL: AnyHttpUrl
     CASHBACK_SERVICE_TOKEN: str
+
+    SENTRY_DSN: Optional[HttpUrl] = None
 
     class Config:
         case_sensitive = True
