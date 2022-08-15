@@ -56,9 +56,9 @@ class RevendedorRepository:
         return revendedor
 
     def get_compras_with_distributed_cashback_per_month(self, id: UUID) -> list[Any]:
-        """Query to get the compras with dilluted cashback per month"""
+        """Query to get the compras with distributed cashback per month"""
 
-        # Lê os valores acumualdos de compra agrupados por mês
+        # Lê os valores acumulados de compra agrupados por mês
         cashback_acumulado_mes = (
             self.db.query(
                 Revendedor.id.label("revendedor_id"),
