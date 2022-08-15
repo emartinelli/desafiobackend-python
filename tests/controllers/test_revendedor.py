@@ -260,7 +260,7 @@ def test_get_compras(
     )
 
     response = client.get(
-        f"{settings.API_V1_STR}/revendedor/{revendedor_in['cpf']}/compra/",
+        f"{settings.API_V1_STR}/revendedor/{revendedor_in['cpf']}/compras/",
         json=compra_in,
         headers={"Content-Type": "application/json", **api_user_headers},
     )

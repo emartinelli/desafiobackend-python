@@ -37,16 +37,6 @@ def cashback_criterios(db_session: Session) -> None:
     db_session.commit()
 
 
-@pytest.fixture
-def revendedor_in() -> RevendedorIn:
-    return RevendedorIn(
-        nome_completo="Teste",
-        cpf="12345678901",
-        email="teste@teste.com",
-        senha="123456",
-    )
-
-
 @pytest.mark.parametrize(
     "revendedor_in, revendedor_out",
     [
@@ -98,23 +88,29 @@ def test_revendedor_create_that_already_exists_raises_exception(
 
 
 @pytest.mark.parametrize(
-    "compras_data_in, compras_data_out",
+    "revendedor_in, compra_in, compra_out",
     [
         (
-            [
-                dict(
-                    valor=Decimal("100.00"),
-                    data=datetime.datetime(2020, 1, 1),
-                )
-            ],
-            [
-                dict(
-                    valor=Decimal("100.00"),
-                    data=datetime.datetime(2020, 1, 1),
-                    porcentagem_de_cashback=Decimal("0.10"),
-                    valor_de_cashback=Decimal("10.00"),
-                )
-            ],
+            RevendedorIn(
+                nome_completo="Teste",
+                cpf="12345678901",
+                email="teste@teste.com",
+                senha="123456",
+            ),
+            CompraIn(
+                codigo="ffedaf47-4fc5-4185-8ad1-003930d316e8",
+                valor=Decimal("100.00"),
+                data=datetime.datetime(2020, 1, 1),
+                cpf_revendedor="12345678901",
+            ),
+            CompraOut(
+                codigo="ffedaf47-4fc5-4185-8ad1-003930d316e8",
+                valor=Decimal("100.00"),
+                data=datetime.datetime(2020, 1, 1),
+                status=StatusEnum.em_validacao,
+                porcentagem_de_cashback=Decimal("0.10"),
+                valor_de_cashback=Decimal("10.00"),
+            ),
         )
     ],
 )
@@ -122,23 +118,13 @@ def test_get_compras(
     db_session: Session,
     cashback_criterios: None,
     revendedor_in: RevendedorIn,
-    compras_data_in: dict,
-    compras_data_out: dict,
+    compra_in: dict,
+    compra_out: dict,
 ):
-    utils.create_revendedor(db_session, revendedor_in=revendedor_in)
-
-    CompraIn(codigo=uuid.uuid4(), cpf_revendedor=revendedor_in.cpf, **compra_in),
-
-    for compra_in in compras_data_in:
-        utils.create_compra(
-            db_session,
-            compra_in=CompraIn(
-                codigo=uuid.uuid4(), cpf_revendedor=revendedor_in.cpf, **compra_in
-            ),
-        )
+    utils.create_revendedor_and_compra(
+        db_session, revendedor_in=revendedor_in, compra_in=compra_in
+    )
 
     service = RevendedorService(db_session)
     compras = service.get_compras(revendedor_in.cpf)
-
-    for compra_out, compra_data_in in zip(compras, compras_data_in):
-        assert compra_out == CompraOut()
+    assert compra_out in compras
