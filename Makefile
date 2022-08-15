@@ -1,6 +1,9 @@
 .PHONY: run/dev black isort db/upgrade test test/db
 
-run/dev:
+run/db:
+	docker-compose up -d --no-recreate db
+
+run/dev: run/db
 	poetry run uvicorn main:app --reload
 
 black:
@@ -14,8 +17,5 @@ format: black isort
 db/upgrade:
 	alembic upgrade head
 
-test/db:
-	docker-compose up -d --no-recreate db
-
-test: test/db
+test: run/db
 	poetry run pytest -v tests
