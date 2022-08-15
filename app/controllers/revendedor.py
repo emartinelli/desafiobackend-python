@@ -5,11 +5,16 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_pagination import Page, add_pagination, paginate
 from sqlalchemy.orm import Session
 
-from app.controllers.dependencies import (get_current_api_user,
-                                          get_current_revendedor, get_db)
+from app.controllers.dependencies import (
+    get_current_api_user,
+    get_current_revendedor,
+    get_db,
+)
 from app.exceptions.cashback import CashbackClientException
-from app.exceptions.revendedor import (DuplicateRevendedorException,
-                                       RevendedorNotFoundException)
+from app.exceptions.revendedor import (
+    DuplicateRevendedorException,
+    RevendedorNotFoundException,
+)
 from app.schemas.cashback import CashbackAcumuladoOut
 from app.schemas.compra import CompraOut
 from app.schemas.revendedor import RevendedorIn, RevendedorOut

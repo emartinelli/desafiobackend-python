@@ -4,13 +4,12 @@ run/dev:
 	poetry run uvicorn main:app --reload
 
 black:
-	poetry run black .
+	black --config ./pyproject.toml app tests
 
 isort:
-	poetry run isort .
+	isort --settings-path ./pyproject.toml --recursive app tests
 
 format: black isort
-
 
 db/upgrade:
 	alembic upgrade head
