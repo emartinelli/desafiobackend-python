@@ -246,15 +246,15 @@ pydantic = ">=1.7.2"
 
 [package.extras]
 mongoengine = ["mongoengine (>=0.23.1,<0.25.0)"]
-all = ["mongoengine (>=0.23.1,<0.25.0)", "motor (>=2.5.1,<3.0.0)", "piccolo (>=0.29,<0.35)", "Django (<3.3.0)", "ormar (>=0.10.5)", "asyncpg (>=0.24.0)", "tortoise-orm[aiosqlite,asyncpg,aiomysql] (>=0.16.18,<0.20.0)", "orm (>=0.1.5)", "databases[sqlite,mysql,postgresql] (>=0.4.0)", "SQLAlchemy (>=1.3.20)", "gino[starlette] (>=1.0.1)"]
+all = ["mongoengine (>=0.23.1,<0.25.0)", "motor (>=2.5.1,<3.0.0)", "piccolo (>=0.29,<0.35)", "Django (<3.3.0)", "ormar (>=0.10.5)", "asyncpg (>=0.24.0)", "tortoise-orm[aiomysql,asyncpg,aiosqlite] (>=0.16.18,<0.20.0)", "orm (>=0.1.5)", "databases[postgresql,sqlite,mysql] (>=0.4.0)", "SQLAlchemy (>=1.3.20)", "gino[starlette] (>=1.0.1)"]
 motor = ["motor (>=2.5.1,<3.0.0)"]
 piccolo = ["piccolo (>=0.29,<0.35)"]
-django = ["Django (<3.3.0)", "databases[sqlite,mysql,postgresql] (>=0.4.0)"]
+django = ["Django (<3.3.0)", "databases[postgresql,sqlite,mysql] (>=0.4.0)"]
 ormar = ["ormar (>=0.10.5)"]
 asyncpg = ["asyncpg (>=0.24.0)", "SQLAlchemy (>=1.3.20)"]
-tortoise = ["tortoise-orm[aiosqlite,asyncpg,aiomysql] (>=0.16.18,<0.20.0)"]
-orm = ["typesystem (>=0.2.0,<0.3.0)", "orm (>=0.1.5)", "databases[sqlite,mysql,postgresql] (>=0.4.0)"]
-databases = ["databases[sqlite,mysql,postgresql] (>=0.4.0)"]
+tortoise = ["tortoise-orm[aiomysql,asyncpg,aiosqlite] (>=0.16.18,<0.20.0)"]
+orm = ["typesystem (>=0.2.0,<0.3.0)", "orm (>=0.1.5)", "databases[postgresql,sqlite,mysql] (>=0.4.0)"]
+databases = ["databases[postgresql,sqlite,mysql] (>=0.4.0)"]
 gino = ["SQLAlchemy (>=1.3.20)", "gino[starlette] (>=1.0.1)"]
 sqlalchemy = ["SQLAlchemy (>=1.3.20)"]
 
@@ -576,6 +576,14 @@ pycrypto = ["pyasn1", "pycrypto (>=2.6.0,<2.7.0)"]
 cryptography = ["cryptography (>=3.4.0)"]
 
 [[package]]
+name = "python-json-logger"
+version = "2.0.4"
+description = "A python library adding a json log formatter"
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[[package]]
 name = "python-multipart"
 version = "0.0.5"
 description = "A streaming multipart parser for Python"
@@ -796,7 +804,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "d16bff325d637fe629758f24d6bc52d5c35ca763a5d25ef3476ca67283db0bd4"
+content-hash = "bd6c13cf566d75d67eb951e389a65c7b6ad38b4762569953498e83c7d6ed33be"
 
 [metadata.files]
 alembic = [
@@ -1395,6 +1403,10 @@ python-dotenv = [
 python-jose = [
     {file = "python-jose-3.3.0.tar.gz", hash = "sha256:55779b5e6ad599c6336191246e95eb2293a9ddebd555f796a65f838f07e5d78a"},
     {file = "python_jose-3.3.0-py2.py3-none-any.whl", hash = "sha256:9b1376b023f8b298536eedd47ae1089bcdb848f1535ab30555cd92002d78923a"},
+]
+python-json-logger = [
+    {file = "python-json-logger-2.0.4.tar.gz", hash = "sha256:764d762175f99fcc4630bd4853b09632acb60a6224acb27ce08cd70f0b1b81bd"},
+    {file = "python_json_logger-2.0.4-py3-none-any.whl", hash = "sha256:3b03487b14eb9e4f77e4fc2a023358b5394b82fd89cecf5586259baed57d8c6f"},
 ]
 python-multipart = [
     {file = "python-multipart-0.0.5.tar.gz", hash = "sha256:f7bb5f611fc600d15fa47b3974c8aa16e93724513b49b5f95c81e6624c83fa43"},

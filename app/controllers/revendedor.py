@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_pagination import Page, add_pagination, paginate
@@ -15,6 +17,8 @@ from app.schemas.token import Token
 from app.services.cashback import CashbackService
 from app.services.revendedor import RevendedorService
 
+logger = logging.getLogger(__name__)
+
 router = APIRouter()
 
 
@@ -28,6 +32,7 @@ def create_revendedor(
     try:
         return service.create(revendedor_in)
     except DuplicateRevendedorException:
+        logger.exception(f"Revendedor duplicado com cpf: {revendedor_in.cpf}")
         raise HTTPException(status_code=422, detail="Revendedor já cadastrado")
 
 
@@ -39,6 +44,7 @@ def get_cashback_acumulado(
     try:
         return service.get_cashback_acumulado(cpf)
     except RevendedorNotFoundException:
+        logger.exception(f"Revendedor não encontrado com cpf: {cpf}")
         raise HTTPException(status_code=422, detail="Revendedor não encontrado")
     except CashbackClientException as e:
         if 400 <= e.status_code < 500:
@@ -72,6 +78,7 @@ def get_compras_with_cashback(
     try:
         return paginate(service.get_compras(cpf))
     except RevendedorNotFoundException:
+        logger.exception(f"Revendedor não encontrado com cpf: {cpf}")
         raise HTTPException(status_code=422, detail="Revendedor não encontrado")
 
 

@@ -1,3 +1,4 @@
+import logging
 from datetime import timedelta
 from uuid import UUID
 
@@ -13,16 +14,20 @@ from app.schemas.revendedor import RevendedorIn, RevendedorOut
 from app.schemas.token import Token
 from app.services.compra import CompraService
 
+logger = logging.getLogger(__name__)
+
 
 class RevendedorService:
     def __init__(self, db: Session):
         self.repository = RevendedorRepository(db)
 
     def create(self, revendedor: RevendedorIn) -> RevendedorOut:
+        logger.info(f"Criando revendedor(a) com cpf: {revendedor.cpf}")
         revendedor_model = self.repository.create(revendedor)
         return RevendedorRepository.map_model_to_schema(revendedor_model)
 
     def get(self, id: UUID) -> RevendedorOut:
+        logger.info(f"Buscando revendedor(a) com id: {id}")
         revendedor_model = self.repository.get(id)
         return RevendedorRepository.map_model_to_schema(revendedor_model)
 
@@ -40,6 +45,7 @@ class RevendedorService:
         }
 
     def get_compras(self, cpf: str) -> list[CompraOut]:
+        logger.info(f"Buscando compras do revendedor(a) com cpf: {cpf}")
         revendedor = self.repository.get_revendedor_by_cpf(cpf)
         if not revendedor:
             raise RevendedorNotFoundException(

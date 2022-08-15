@@ -1,3 +1,4 @@
+import logging
 from decimal import Decimal
 from typing import Optional
 
@@ -10,6 +11,8 @@ from app.repositories.compra import CompraRepository
 from app.repositories.revendedor import RevendedorRepository
 from app.schemas.compra import CompraIn, CompraOut
 
+logger = logging.getLogger(__name__)
+
 
 class CompraService:
     def __init__(self, db: Session):
@@ -18,6 +21,7 @@ class CompraService:
         self.cashback_repository = CashbackRepository(db)
 
     def create(self, compra: CompraIn) -> CompraOut:
+        logger.info(f"Criando compra com codigo: {compra.codigo}")
         revendedor = self.revendedor_repository.get_revendedor_by_cpf(
             compra.cpf_revendedor
         )
@@ -31,6 +35,7 @@ class CompraService:
             revendedor.id,
             status=revendedor.status_compra_default,
         )
+        logger.info(f"Compra com codigo: {compra.codigo} criada")
 
         return self.map_model_to_schema(compra_model)
 
