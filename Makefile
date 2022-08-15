@@ -7,7 +7,7 @@ black:
 	black --config ./pyproject.toml app tests
 
 isort:
-	isort --settings-path ./pyproject.toml --recursive app tests
+	isort --settings-path ./pyproject.toml app tests
 
 format: black isort
 

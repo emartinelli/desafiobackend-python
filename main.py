@@ -14,7 +14,7 @@ logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
 sentry_sdk.init(
-    dsn="https://a60c204c993c4dc99a2d692300e8a5d7@o1361925.ingest.sentry.io/6653029",
+    dsn=settings.SENTRY_DSN,
     integrations=[
         StarletteIntegration(),
         FastApiIntegration(),
