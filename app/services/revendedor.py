@@ -3,12 +3,15 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 
+from app.exceptions.revendedor import RevendedorNotFoundException
 from app.infra.security import create_access_token
 from app.infra.settings import settings
 from app.models.revendedor import Revendedor as Revendedor
 from app.repositories.revendedor import RevendedorRepository
+from app.schemas.compra import CompraOut
 from app.schemas.revendedor import RevendedorIn, RevendedorOut
 from app.schemas.token import Token
+from app.services.compra import CompraService
 
 
 class RevendedorService:
@@ -35,3 +38,17 @@ class RevendedorService:
             ),
             "token_type": "bearer",
         }
+
+    def get_compras(self, cpf: str) -> list[CompraOut]:
+        revendedor = self.repository.get_revendedor_by_cpf(cpf)
+        if not revendedor:
+            raise RevendedorNotFoundException(
+                f"Revendedor with given cpf `{cpf}` does not exist"
+            )
+
+        return [
+            CompraService.map_model_to_schema(*compra)
+            for compra in self.repository.get_compras_with_distributed_cashback_per_month(
+                revendedor.id
+            )
+        ]

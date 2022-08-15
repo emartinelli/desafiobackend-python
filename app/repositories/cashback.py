@@ -1,12 +1,13 @@
 from decimal import Decimal
+
+from psycopg2.extras import NumericRange
 from sqlalchemy.orm import Session
 
 from app.exceptions.revendedor import RevendedorNotFoundException
 from app.infra.clients.cashback import CashbackClient
+from app.models.cashback import CashbackCriterio
 from app.repositories.revendedor import RevendedorRepository
 from app.schemas.cashback import CashbackAcumuladoOut
-from app.models.cashback import CashbackCriterio
-from psycopg2.extras import NumericRange
 
 
 class CashbackRepository:

@@ -22,7 +22,15 @@ def create_revendedor_and_compra(
     revendedor_in: RevendedorIn,
 ) -> CompraModel:
     revendedor = create_revendedor(db, revendedor_in)
-    return CompraRepository(db).create(compra_in, revendedor_id=revendedor.id)
+    return create_compra(db, compra_in, revendedor)
+
+
+def create_compra(
+    db: Session,
+    compra_in: CompraIn,
+    revendedor_in: RevendedorIn,
+) -> CompraModel:
+    return CompraRepository(db).create(compra_in, revendedor_id=revendedor_in.id)
 
 
 def get_revendedor_authentication_headers(

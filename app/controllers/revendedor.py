@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi_pagination import Page, add_pagination, paginate
 from sqlalchemy.orm import Session
 
 from app.controllers.dependencies import (get_current_api_user,
@@ -8,6 +9,7 @@ from app.exceptions.cashback import CashbackClientException
 from app.exceptions.revendedor import (DuplicateRevendedorException,
                                        RevendedorNotFoundException)
 from app.schemas.cashback import CashbackAcumuladoOut
+from app.schemas.compra import CompraOut
 from app.schemas.revendedor import RevendedorIn, RevendedorOut
 from app.schemas.token import Token
 from app.services.cashback import CashbackService
@@ -60,3 +62,17 @@ def login_access_token(
 @router.get("/login/validate", response_model=RevendedorOut)
 def login_validate(current_revendedor: RevendedorOut = Depends(get_current_revendedor)):
     return current_revendedor
+
+
+@router.get("/{cpf}/compras", response_model=Page[CompraOut])
+def get_compras_with_cashback(
+    cpf: str, db: Session = Depends(get_db), current_user=Depends(get_current_api_user)
+):
+    service = RevendedorService(db)
+    try:
+        return paginate(service.get_compras(cpf))
+    except RevendedorNotFoundException:
+        raise HTTPException(status_code=422, detail="Revendedor não encontrado")
+
+
+add_pagination(router)

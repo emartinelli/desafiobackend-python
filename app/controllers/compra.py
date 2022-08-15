@@ -26,14 +26,3 @@ def create_compra(
             status_code=422,
             detail=f"Nenhum revendedor encontrado com o CPF `{compra_in.cpf_revendedor}`",
         )
-
-
-@router.get("/", response_model=Page[CompraOut], status_code=200)
-def get_compras(
-    db: Session = Depends(get_db), current_user=Depends(get_current_api_user)
-):
-    service = CompraService(db)
-    return paginate(service.get_compras())
-
-
-add_pagination(router)

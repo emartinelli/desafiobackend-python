@@ -2,6 +2,7 @@ from decimal import Decimal
 from typing import Optional
 from uuid import UUID
 
+from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -40,6 +41,3 @@ class CompraRepository:
         self.db.refresh(compra_model)
 
         return compra_model
-
-    def get_all(self) -> list[CompraModel]:
-        return self.db.query(CompraModel).all()

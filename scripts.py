@@ -1,12 +1,11 @@
 from decimal import Decimal
-from webbrowser import get
 
 import typer
+from psycopg2.extras import NumericRange
 
 from app.controllers.dependencies import get_db
 from app.repositories.api_user import APIUserRepository
 from app.repositories.cashback import CashbackRepository
-from psycopg2.extras import NumericRange
 
 app = typer.Typer()
 
