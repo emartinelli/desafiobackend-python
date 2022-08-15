@@ -1,8 +1,12 @@
+from decimal import Decimal
+
 import pytest
+from psycopg2.extras import NumericRange
 from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import Session, scoped_session, sessionmaker
 
 from app.infra.settings import settings
+from app.models.cashback import CashbackCriterio
 
 
 @pytest.fixture(scope="session")
@@ -28,3 +32,26 @@ def db_session(db_engine):
     session.close()
     transaction.rollback()
     connection.close()
+
+
+@pytest.fixture
+def cashback_criterios(db_session: Session) -> None:
+    db_session.add_all(
+        [
+            CashbackCriterio(
+                intervalo=NumericRange(Decimal("0"), Decimal("1000")),
+                porcentagem_de_cashback=Decimal("0.10"),
+            ),
+            CashbackCriterio(
+                intervalo=NumericRange(Decimal("1000"), Decimal("1500")),
+                porcentagem_de_cashback=Decimal("0.10"),
+            ),
+            CashbackCriterio(
+                intervalo=NumericRange(
+                    Decimal("1500"),
+                ),
+                porcentagem_de_cashback=Decimal("0.10"),
+            ),
+        ]
+    )
+    db_session.commit()

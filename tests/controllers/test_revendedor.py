@@ -250,6 +250,7 @@ def test_validate_login(
 def test_get_compras(
     client: TestClient,
     db_session: Session,
+    cashback_criterios: None,
     revendedor_in: dict,
     api_user_headers: dict[str, str],
     compra_in: dict,
@@ -266,4 +267,5 @@ def test_get_compras(
     )
 
     assert response.status_code == 200
-    assert compra_out in response.json()["items"]
+    items = response.json()["items"]
+    assert compra_out in items

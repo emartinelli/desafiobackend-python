@@ -1,40 +1,14 @@
 import datetime
-import uuid
 from decimal import Decimal
 
 import pytest
-from psycopg2.extras import NumericRange
 from sqlalchemy.orm import Session
 
-from app.models.cashback import CashbackCriterio
 from app.repositories.revendedor import DuplicateRevendedorException
 from app.schemas.compra import CompraIn, CompraOut, StatusEnum
 from app.schemas.revendedor import RevendedorIn, RevendedorOut
 from app.services.revendedor import RevendedorService
 from tests import utils
-
-
-@pytest.fixture
-def cashback_criterios(db_session: Session) -> None:
-    db_session.add_all(
-        [
-            CashbackCriterio(
-                intervalo=NumericRange(Decimal("0"), Decimal("1000")),
-                porcentagem_de_cashback=Decimal("0.10"),
-            ),
-            CashbackCriterio(
-                intervalo=NumericRange(Decimal("1000"), Decimal("1500")),
-                porcentagem_de_cashback=Decimal("0.10"),
-            ),
-            CashbackCriterio(
-                intervalo=NumericRange(
-                    Decimal("1500"),
-                ),
-                porcentagem_de_cashback=Decimal("0.10"),
-            ),
-        ]
-    )
-    db_session.commit()
 
 
 @pytest.mark.parametrize(
