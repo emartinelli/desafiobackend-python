@@ -19,6 +19,7 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.5"
 python-json-logger = "^2.0.4"
 sentry-sdk = {extras=["fastapi"], version="^1.9.4"}
+gunicorn = "^20.1.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"
@@ -37,7 +38,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 filterwarnings = [
-    "error",
     "ignore::sqlalchemy.exc.SAWarning",
 ]
 

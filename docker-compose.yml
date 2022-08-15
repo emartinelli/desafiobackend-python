@@ -1,6 +1,20 @@
 version: '3.9'
 
 services:
+  app:
+    build:
+      context: .
+      target: production
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    networks:
+      - app_network
+    env_file:
+      - .env
+    depends_on:
+      - db
   db:
     image: postgres:14
     volumes:
@@ -9,3 +23,8 @@ services:
       - "15432:5432"
     env_file:
       - .env
+    networks:
+      - app_network
+
+networks:
+  app_network: {}

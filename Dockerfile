@@ -54,6 +54,8 @@ COPY ./gunicorn_conf.py /gunicorn_conf.py
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
+COPY ./logging.conf /logging.conf
+
 COPY ./app /app
 WORKDIR /app
 

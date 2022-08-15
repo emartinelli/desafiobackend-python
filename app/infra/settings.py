@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     SERVER_PORT: int
     BACKEND_CORS_ORIGINS: list[AnyHttpUrl] = []
 
+    ENV: str = "local"
+
     SECRET_KEY: str = secrets.token_urlsafe(32)
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
@@ -46,5 +48,10 @@ class Settings(BaseSettings):
         case_sensitive = True
 
 
-settings = Settings(_env_file=".env", _env_file_encoding="utf-8")
+try:
+    settings = Settings(_env_file=".env", _env_file_encoding="utf-8")
+except ImportError:
+    # In case the dotenv lib is not found, we use the default settings
+    settings = Settings()
+
 print(settings.SQLALCHEMY_DATABASE_URI)

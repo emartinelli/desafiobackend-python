@@ -3,6 +3,7 @@
 # Tecnologias
 
 - python
+- poetry - python dependency manager
 - fastapi - web framework
 - SQLAlchemy - SQL ORM
 - alembic - database migration tool for SQLAlchemy
@@ -19,6 +20,19 @@
 ![swagger](.docs/swagger.png)
 ![redoc](.docs/redoc.png)
 
+# Pre-requisitos
+
+- Instalar o [poetry](https://python-poetry.org/)
+- Instalar as dependências
+    
+    poetry install
+
+- Copie o arquivo `.template.env` para `.env` e preencha as variáveis de ambiente de acordo.
+
+- Rode para iniciar o banco e criar as tabelas
+
+    make db/run
+    make db/upgrade
 
 # Como testar
 
@@ -37,14 +51,8 @@ Irá rodar `isort` e `black` para formatar os arquivos.
 
 ## Local
 
-Copie o arquivo `.template.env` para `.env` e preencha as variáveis de ambiente de acordo.
-
     make run/dev
 
-Obs.: o banco irá subir automaticamente usando docker.
-
-Para criar as tabelas rode:
-   
-    make db/upgrade
-
 ## Docker
+
+    docker-compose up --build
